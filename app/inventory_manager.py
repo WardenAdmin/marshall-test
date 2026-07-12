@@ -20,10 +20,3 @@ class InventoryManager:
             self._stock[item_id] = current - quantity
             return True
         return False
-
-    def restore_stock(self, item_id: str, quantity: int):
-        """
-        Restores stock to the shelves in case of order cancellations,
-        failures, or downstream transaction rollbacks.
-        """
-        self._stock[item_id] = self.get_stock(item_id) + quantity

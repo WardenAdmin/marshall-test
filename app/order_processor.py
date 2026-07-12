@@ -5,14 +5,15 @@ class OrderProcessor:
         self.inventory = inventory_manager
 
     def process_order(self, order: Order) -> Order:
-        deducted_items = []
+        deducted_items = []  # Track deducted items for potential rollback
         for order_item in order.items:
             success = self.inventory.deduct_stock(order_item.item_id, order_item.quantity)
             
             if not success:
-                # Rollback inventory for previously deducted items
+                # Rollback previously deducted items
                 for item_id, quantity in deducted_items:
                     self.inventory.restore_stock(item_id, quantity)
+                
                 order.status = OrderStatus.FAILED
                 order.error_message = f"Item {order_item.item_id} is out of stock."
                 return order

@@ -10,15 +10,13 @@ class OrderProcessor:
             success = self.inventory.deduct_stock(order_item.item_id, order_item.quantity)
             
             if not success:
-                # Restore stock for previously deducted items
+                # Restore inventory for all previously deducted items
                 for item_id, quantity in deducted_items:
                     self.inventory.set_stock(item_id, self.inventory.get_stock(item_id) + quantity)
-                
                 order.status = OrderStatus.FAILED
                 order.error_message = f"Item {order_item.item_id} is out of stock."
                 return order
-            else:
-                deducted_items.append((order_item.item_id, order_item.quantity))
+            deducted_items.append((order_item.item_id, order_item.quantity))
         
         order.status = OrderStatus.COMPLETED
         return order

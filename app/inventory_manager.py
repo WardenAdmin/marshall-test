@@ -18,5 +18,5 @@ class InventoryManager:
         return False
 
     def restore_stock(self, item_id: str, quantity: int) -> None:
-        current = self._stock.get(item_id, 0)
-        self._stock[item_id] = current + quantity
+        self._stock[item_id] = self._stock.get(item_id, 0) + quantity
+

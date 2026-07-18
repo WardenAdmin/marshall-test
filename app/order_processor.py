@@ -11,12 +11,8 @@ class OrderProcessor:
             if not success:
                 order.status = OrderStatus.FAILED
                 order.error_message = f"Item {order_item.item_id} is out of stock."
-                order.status = OrderStatus.FAILED
-                order.error_message = f"Item {order_item.item_id} is out of stock."
-                for processed_item in order.items:
-                    if processed_item == order_item:
-                        break
-                    self.inventory.restore_stock(processed_item.item_id, processed_item.quantity)
+                for order_item in order.items:
+                    self.inventory.restore_stock(order_item.item_id, order_item.quantity)
                 return order
         
         order.status = OrderStatus.COMPLETED
